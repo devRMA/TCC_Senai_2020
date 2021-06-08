@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Monitorar";
+}
+
+<div class="block-heading">
+<h2 class="text-info"><br>Monitorar</h2>
+<p><strong>Temperatura</strong></p>
+</div>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<a
+asp-action="Edit" asp-route-id="@Model.ProdutoId" style="margin-right: 15px;margin-left: 15px;">Editar</a><a asp-action="Index" style="margin-right: 15px;margin-left: 15px;">Voltar</a></section>
+
+@section Scripts
+{
+    <script>
+        window.onload = function () {
+
+            var dataPoints = [];
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title: {
+                    text: "Temperatura"
+                },
+                axisY: {
+                    title: "°C",
+                    titleFontSize: 24,
+                    maximum: @Model.Limite_max,
+                    minimum: @Model.Limite_min
+                },
+                data: [{
+                    type: "line",
+                    yValueFormatString: "00.00°C",
+                    dataPoints: dataPoints
+                }]
+            });
+
+            function addData(data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (dataPoints.length >= 30) dataPoints.splice(0, 1);
+                    dataPoints.push({
+                        x: new Date(data[i].x),
+                        y: data[i].y
+                    });
+                }
+                chart.render();
+            }
+
+            $.getJSON("/Produto/APIGetTemp/?id=@Model.ProdutoId", addData);
+
+            setInterval(function () {
+                $.getJSON("/Produto/APIGetTemp/?id=@Model.ProdutoId", addData);
+            }, 5000);
+        }
+    </script>
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+}

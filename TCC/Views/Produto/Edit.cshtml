@@ -1,0 +1,41 @@
+@model TCC.Models.Produto
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{ ViewData["Title"] = "Editar"; }
+@if (ViewData["MSG_E"] != null)
+{
+    <p class="alert alert-warning"> @Html.Raw(ViewData["MSG_E"]) </p>}
+@if (ViewData["MSG_S"] != null)
+{
+    <p class="alert alert-success"> @Html.Raw(ViewData["MSG_S"]) </p>}
+
+<div class="block-heading">
+    <h2 class="text-info"><br>Editar Produto</h2>
+</div>
+<form asp-action="Edit">
+    <input type="hidden" name="captcha" id="captchaInput" value="" />
+    <div class="form-group">
+        <label asp-for="Limite_max" class="control-label">Limite Máximo</label><input asp-for="Limite_max" class="form-control" />
+        <span asp-validation-for="Limite_max" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Limite_min" class="control-label">Limite Mínimo</label>
+        <input asp-for="Limite_min" class="form-control" />
+        <span asp-validation-for="Limite_min" class="text-danger"></span>
+    </div><div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div><a asp-action="Index"><br>Voltar</a>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["googleReCaptcha:SiteKey"]"></script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('@Configuration["googleReCaptcha:SiteKey"]', { action: 'contact' }).then(function (token) {
+            $("#captchaInput").val(token);
+        });
+    });
+    </script>
+}

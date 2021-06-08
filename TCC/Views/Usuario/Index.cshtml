@@ -1,0 +1,29 @@
+@inject TCC.Libs.Login.LoginUsuario _loginUsuario
+@{
+    Usuario user = _loginUsuario.GetUsuario();
+    ViewData["Title"] = "Detalhes da Conta";
+}
+
+<div class="block-heading">
+    <h2 class="text-info"><br>Detalhes da Conta</h2>
+</div>
+<form>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>@Html.DisplayNameFor(model => user.Nome)</strong></td>
+                    <td>@Html.DisplayFor(model => user.Nome)</td>
+                </tr>
+                <tr>
+                    <td><strong>@Html.DisplayNameFor(model => user.Email)</strong></td>
+                    <td>@Html.DisplayFor(model => user.Email)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div><a class="btn btn-primary" role="button" style="margin-top: 10px;margin-right: 10px;margin-left: 10px;color: rgb(0,0,0);background: rgb(228,228,228);border-color: rgb(255,255,255);" asp-action="ChangePassword">Alterar senha</a><a class="btn btn-primary"
+                                                                                                                                                                                                                                                role="button" style="margin-top: 10px;margin-right: 10px;margin-left: 10px;color: rgb(0,0,0);background: rgb(228,228,228);border-color: rgb(255,255,255);" asp-action="ChangeEmail">Alterar e-mail</a><a class="btn btn-primary" role="button"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            style="margin-top: 10px;margin-right: 10px;margin-left: 10px;color: rgb(255,255,255);background: rgb(170,73,73);border-color: rgb(255,255,255);" asp-action="Delete">Deletar conta</a>
+</form>

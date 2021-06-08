@@ -1,0 +1,87 @@
+﻿@*Injeção de dependência feita no Startup.cs*@
+@inject TCC.Libs.Login.LoginUsuario _loginUsuario
+@{
+    Usuario user = _loginUsuario.GetUsuario();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>@ViewData["Title"] - Monitor de Temperatura</title>
+
+    <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="~/assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="~/assets/css/smoothproducts.css">
+</head>
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+        <div class="container">
+            <a class="navbar-brand logo" asp-controller="Home" asp-action="Index">Monitor de Temperatura</a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            @if (actionName != "Login")
+            {
+
+                @if (user == null)
+                {
+                    <div class="collapse navbar-collapse" id="navcol-1">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item item"><a class="nav-link" asp-controller="Usuario" asp-action="Login">Login</a></li>
+                            <li class="nav-item item"><a class="nav-link" asp-controller="Usuario" asp-action="Signup">Cadastrar</a></li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                <div class="dropdown">
+                    <a class="dropdown-toggle btn" data-toggle="dropdown" aria-expanded="false">Opções&nbsp;</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" asp-controller="Usuario" asp-action="Index">Conta</a>
+                        <a class="dropdown-item" asp-controller="Produto" asp-action="Index">Produtos</a>
+                        <form asp-controller="Usuario" asp-action="Logout">
+                            <input type="submit" value="Logout" class="dropdown-item bg-danger" />
+                        </form>
+                    </div>
+                </div>
+                }
+            }
+        </div>
+    </nav>
+    <section class="clean-block clean-form dark" style="background: rgb(255,255,255);">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </section>
+    <footer class="footer text-muted fixed-bottom">
+        <div class="container">
+            &copy; 2020 - Antonio e Rafael
+        </div>
+    </footer>
+
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/chart.min.js"></script>
+    <script src="~/assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="~/assets/js/smoothproducts.min.js"></script>
+    <script src="~/assets/js/theme.js"></script>
+    <script>
+        function alterar_senha() {
+            if (document.getElementById('input_password').type === 'password') {
+                document.getElementById('input_password').type = 'text';
+            }
+            else {
+                document.getElementById('input_password').type = 'password';
+            }
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html >

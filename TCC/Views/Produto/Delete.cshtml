@@ -1,0 +1,52 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@model TCC.Models.Produto
+
+@{
+    ViewData["Title"] = "Desvincular";
+}
+
+<div class="block-heading">
+    <h2 class="text-info"><br>Desvincular Produto</h2>
+    <p>Você tem certeza que deseja desvincular esse produto da sua conta?</p>
+</div>
+<form asp-action="Delete">
+    <input type="hidden" name="captcha" id="captchaInput" value="" />
+    <input type="hidden" asp-for="ProdutoId" />
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>@Html.DisplayNameFor(model => model.Temperatura)</strong></td>
+                    <td>@Html.DisplayFor(model => model.Temperatura)</td>
+                </tr>
+                <tr>
+                    <td><strong>@Html.DisplayNameFor(model => model.Limite_max)</strong></td>
+                    <td>@Html.DisplayFor(model => model.Limite_max)</td>
+                </tr>
+                <tr>
+                    <td><strong>@Html.DisplayNameFor(model => model.Limite_min):</strong></td>
+                    <td>@Html.DisplayFor(model => model.Limite_min)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div><button type="submit" value="Delete" class="btn btn-primary" style="margin-top: 10px;margin-right: 10px;margin-left: 10px;color: rgb(255,255,255);background: rgb(170,73,73);border-color: rgb(255,255,255);">Desvincular</button>
+    <a asp-action="Index" style="margin-left: 54px;margin-top: 0px;">
+        <br>
+        <br>Voltar
+    </a>
+</form>
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["googleReCaptcha:SiteKey"]"></script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('@Configuration["googleReCaptcha:SiteKey"]', { action: 'contact' }).then(function (token) {
+            $("#captchaInput").val(token);
+        });
+    });
+    </script>
+}

@@ -1,0 +1,53 @@
+@model TCC.Models.Usuario
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{ ViewData["Title"] = "Cadastro"; }
+@if (ViewData["MSG_E"] != null)
+{
+    <p class="alert alert-warning"> @Html.Raw(ViewData["MSG_E"]) </p>}
+@if (ViewData["MSG_S"] != null)
+{
+    <p class="alert alert-success"> @Html.Raw(ViewData["MSG_S"]) </p>}
+<div class="block-heading">
+    <h2 class="text-info"><br>Cadastrar</h2>
+</div>
+<form asp-action="Signup">
+    <input type="hidden" name="captcha" id="captchaInput" value="" />
+    <div class="form-group">
+        <label asp-for="Nome" class="control-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Senha" class="control-label"></label>
+        <input asp-for="Senha" class="form-control" id="input_password" placeholder="******" type="password" />
+        <span asp-validation-for="Senha" class="text-danger"></span>
+    </div>
+    <input type="checkbox" onclick="alterar_senha()">
+    <label> Mostrar senha</label>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+    <a asp-controller="Home" asp-action="Index">
+        <br>
+        Voltar
+    </a>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["googleReCaptcha:SiteKey"]"></script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('@Configuration["googleReCaptcha:SiteKey"]', { action: 'contact' }).then(function (token) {
+            $("#captchaInput").val(token);
+        });
+    });
+    </script>
+}

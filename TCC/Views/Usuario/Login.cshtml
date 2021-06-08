@@ -1,0 +1,64 @@
+@model TCC.Models.Usuario
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    ViewData["Title"] = "Login";
+}
+@if (ViewData["MSG_E"] != null)
+{
+    <p class="alert alert-warning"> @Html.Raw(ViewData["MSG_E"]) </p>
+}
+@if (ViewData["MSG_S"] != null)
+{
+    <p class="alert alert-success"> @Html.Raw(ViewData["MSG_S"]) </p>
+}
+<div class="block-heading">
+    <h2 class="text-info"><br>Log In</h2>
+</div>
+<form asp-action="Login">
+    <input type="hidden" name="captcha" id="captchaInput" value="" />
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" placeholder="Email" type="email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Senha</label>
+        <input asp-for="Senha" id="input_password" class="form-control" placeholder="******" type="password">
+        <span asp-validation-for="Senha" class="text-danger"></span>
+    </div>
+    <input type="checkbox" onclick="alterar_senha()">
+    <label> Mostrar senha</label>
+    <a href="#">
+        <br>
+        Esqueceu a senha?
+        <br>
+        <br>
+    </a>
+    <div class="form-group">
+        <input type="submit" value="Login" class="btn btn-primary btn-block" />
+    </div>
+    <a class="btn btn-primary" role="button" style="
+                    margin: 0px;
+                    margin-top: 15px;
+                    margin-bottom: 15px;
+                    background: rgb(0,123,255);" asp-action="Signup">
+        Cadastrar
+    </a>
+    <a asp-controller="Home" asp-action="Index">
+        <br>
+        Voltar
+    </a>
+</form>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["googleReCaptcha:SiteKey"]"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('@Configuration["googleReCaptcha:SiteKey"]', { action: 'contact' }).then(function (token) {
+                $("#captchaInput").val(token);
+            });
+        });
+    </script>
+}
